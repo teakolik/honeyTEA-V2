@@ -1,10 +1,7 @@
 # honeyTEA v2
 
 Cloudflare + Web Sunucu Log Analizi ile Otomatik IP Honeypot & Ban Sistemi
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Cloudflare API: v4](https://img.shields.io/badge/Cloudflare%20API-v4%20Bearer%20Token-orange)](https://developers.cloudflare.com/api/)
-[![Shell](https://img.shields.io/badge/Shell-Bash-green)](https://www.gnu.org/software/bash/)
+Sadırganları kekleyin!
 
 ---
 
@@ -13,27 +10,6 @@ Cloudflare + Web Sunucu Log Analizi ile Otomatik IP Honeypot & Ban Sistemi
 honeyTEA, web sunucunuzun access log dosyasını okur. `config.txt` içindeki pattern'larla eşleşen kötü niyetli istekleri (WordPress açıklarını arayan tarayıcılar, webshell denemeleri, veritabanı dosyalarına erişim girişimleri, kötü User-Agent'lar vb.) tespit eder. Tespit ettiği IP adreslerini Cloudflare API üzerinden otomatik olarak banlar. Belirlenen süre (varsayılan: 90 dakika) sonunda banı otomatik kaldırır.
 
 Sunucunuz Cloudflare arkasındaysa iptables/firewalld ban işe yaramaz — çünkü sunucunuza gelen istek Cloudflare'den gelir. honeyTEA bu sorunu çözer: engelleme Cloudflare katmanında yapılır, kötü IP sunucunuza hiç ulaşamaz.
-
----
-
-## v1 → v2 Ne Değişti?
-
-| Özellik | v1 | v2 |
-|---|---|---|
-| **Auth** | Global API Key (X-Auth-Email + X-Auth-Key) | Bearer Token (API Token) ✅ |
-| **CF Endpoint** | `/user/firewall/access_rules/rules` | `/zones/{zone_id}/firewall/access_rules/rules` ✅ |
-| **Pattern Türleri** | Sadece URI düz string | URI regex + User-Agent + HTTP Status kodu ✅ |
-| **Log Formatları** | Sadece Combined (Apache) | Combined + JSON log desteği ✅ |
-| **IPv6** | Yok | Tam destek + CIDR normalizasyon ✅ |
-| **Whitelist** | Yok | `whitelist.txt` ile IP istisnası ✅ |
-| **Dry-run** | Yok | `--dry-run` ile test modu ✅ |
-| **Daemon modu** | Yok | `--daemon` ile sürekli çalışma ✅ |
-| **Lock file** | Yok | Çakışma önleme ✅ |
-| **bc bağımlılığı** | Zorunlu | Kaldırıldı (bash aritmetiği) ✅ |
-| **jq bağımlılığı** | Zorunlu | Opsiyonel (grep/sed fallback) ✅ |
-| **API Retry** | Yok | 3 deneme + rate limit farkındalığı ✅ |
-| **SIEM Entegrasyonu** | Yok | `--json-log` ile JSON log çıkışı ✅ |
-| **Log rotation** | Basit satır sayısı | Güvenli rotation tespiti ✅ |
 
 ---
 
@@ -228,6 +204,5 @@ Tüm pattern'lar Extended Regular Expression (ERE) kullanır.
 ## Yazar
 
 **Hamza Şamlıoğlu**  
-Managing Partner, [Privia Security](https://priviasecurity.com)  
 GitHub: [@teakolik](https://github.com/teakolik)  
 LinkedIn: [linkedin.com/in/teakolik](https://www.linkedin.com/in/teakolik/)
