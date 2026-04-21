@@ -9,7 +9,7 @@
 # KURULUM
 # =============================================================================
 #
-#  1) Dosyaları bir dizine kopyalayın:
+#  1) Dosyaları kopyalayın:
 #       mkdir -p /etc/honeytea
 #       cp honeyTEA.sh config.txt whitelist.txt /etc/honeytea/
 #       chmod +x /etc/honeytea/honeyTEA.sh
@@ -21,10 +21,10 @@
 #
 #  3) Aşağıdaki AYARLAR bölümünü düzenleyin.
 #
-#  4) Crontab (5 dakikada bir):
+#  4a) Crontab (5 dakikada bir):
 #       */5 * * * * /etc/honeytea/honeyTEA.sh /etc/honeytea/config.txt
 #
-#  Veya daemon modunda:
+#  4b) Veya daemon modunda:
 #       /etc/honeytea/honeyTEA.sh --daemon /etc/honeytea/config.txt
 #
 # =============================================================================
@@ -125,8 +125,11 @@ log() {
     TS="$(date '+%Y-%m-%dT%H:%M:%S%z')"
 
     if [ "$JSON_LOG" = true ]; then
+        # JSON injection önlemi: özel karakterleri escape et
+        local ESCAPED_MSG
+        ESCAPED_MSG=$(printf '%s' "$MSG" | sed 's/\\/\\\\/g; s/"/\\"/g')
         printf '{"timestamp":"%s","severity":"%s","app":"honeyTEA","message":"%s"}\n' \
-            "$TS" "$SEVERITY" "$MSG" >> "$HONEYTEA_LOG"
+            "$TS" "$SEVERITY" "$ESCAPED_MSG" >> "$HONEYTEA_LOG"
     else
         printf '%s [%s] honeyTEA: %s\n' "$TS" "$SEVERITY" "$MSG" >> "$HONEYTEA_LOG"
     fi
@@ -214,12 +217,10 @@ normalize_ip() {
 is_whitelisted() {
     local IP="$1"
     [ ! -f "$WHITELIST_FILE" ] && return 1
-    grep -qE "^${IP}$|^#" "$WHITELIST_FILE" 2>/dev/null && {
-        # Sadece yorum olmayan satırlara bak
-        grep -qE "^${IP}$" "$WHITELIST_FILE" 2>/dev/null
-        return $?
-    }
-    return 1
+    # grep -F: literal string eşleşmesi — IP içindeki nokta regex wildcard sayılmaz
+    # Yorum satırları (#) ve boş satırlar önceden filtrelenir
+    grep -v '^\s*#' "$WHITELIST_FILE" 2>/dev/null | grep -v '^\s*$' | grep -qF "$IP"
+    return $?
 }
 
 # IP blacklist kontrolü
@@ -291,7 +292,7 @@ cf_unblock() {
 
     local RESP
     RESP=$(cf_api "GET" \
-        "/zones/${CF_ZONE_ID}/firewall/access_rules/rules?mode=block&configuration_target=ip&configuration_value=${ENCODED_IP}&per_page=1" \
+        "/zones/${CF_ZONE_ID}/firewall/access_rules/rules?mode=${CF_ACTION}&configuration_target=ip&configuration_value=${ENCODED_IP}&per_page=1" \
         "") || true
 
     if ! api_success "$RESP"; then
