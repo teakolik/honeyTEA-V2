@@ -5,28 +5,6 @@
 #  Yazar   : Hamza Şamlıoğlu <hamza@priviasecurity.com>
 #  Site    : https://priviasecurity.com
 #  GitHub  : https://github.com/teakolik
-#  Lisans  : MIT
-# =============================================================================
-#
-#  v1 → v2 DEĞİŞİKLİKLERİ:
-#   - Global API Key → Cloudflare Bearer Token (API Token) — güvenli auth
-#   - /user/firewall endpoint → /zones/{zone_id}/firewall — zone-level
-#   - bc bağımlılığı kaldırıldı → saf bash aritmetiği
-#   - Nginx + Apache + Cloudflare Real-IP header desteği
-#   - Combined Log Format ve JSON log desteği
-#   - User-Agent tabanlı saldırı tespiti (config.txt'e UA: prefix eklendi)
-#   - HTTP durum kodu bazlı filtreleme (config.txt'e STATUS: prefix)
-#   - Regex destekli pattern eşleme (eski: düz string)
-#   - IP whitelist desteği — beyaz listedeki IP'ler asla banlanmaz
-#   - Structured loglama: timestamp + severity
-#   - API retry mekanizması (3 deneme, rate limit farkındalığı)
-#   - jq opsiyonel — yoksa grep/sed fallback
-#   - IPv6 tam destek
-#   - Dry-run modu (--dry-run) — banlama yapmadan test et
-#   - Daemon modu (--daemon) — cron yerine sürekli çalışma seçeneği
-#   - Lock file ile çakışma önleme
-#   - SIEM uyumlu JSON log çıkışı (--json-log)
-#
 # =============================================================================
 # KURULUM
 # =============================================================================
@@ -43,10 +21,10 @@
 #
 #  3) Aşağıdaki AYARLAR bölümünü düzenleyin.
 #
-#  4a) Crontab (5 dakikada bir):
+#  4) Crontab (5 dakikada bir):
 #       */5 * * * * /etc/honeytea/honeyTEA.sh /etc/honeytea/config.txt
 #
-#  4b) Veya daemon modunda:
+#  Veya daemon modunda:
 #       /etc/honeytea/honeyTEA.sh --daemon /etc/honeytea/config.txt
 #
 # =============================================================================
