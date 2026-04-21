@@ -1,0 +1,123 @@
+# =============================================================================
+# honeyTEA v2 — Honeypot Pattern Konfigürasyonu
+# =============================================================================
+#
+# KULLANIM:
+#   URI:pattern   → URL yolu regex eşleşmesi (varsayılan, prefix opsiyonel)
+#   UA:pattern    → User-Agent regex eşleşmesi
+#   STATUS:kod    → HTTP durum kodu eşleşmesi (örn: 404, 403, 500)
+#
+# Tüm pattern'lar ERE (Extended Regular Expression) formatındadır.
+# Büyük/küçük harf duyarlı (UA için duyarsız).
+#
+# =============================================================================
+
+# --- WordPress Hassas Dosyaları ---
+/wp-config\.php
+/wp-config\.txt
+/wp-config\.bak
+/wp-config\.php\.bak
+/wp-config\.php~
+/wp-config-sample\.php
+/wp-db\.php
+/.env
+/\.env\.backup
+/\.env\.local
+/\.env\.production
+
+# --- WordPress Admin & XML-RPC ---
+/xmlrpc\.php
+/wp-login\.php\?action=register
+URI:/api/xmlrpc
+
+# --- Joomla ---
+/administrator/index\.php
+/configuration\.php\.bak
+/configuration\.php~
+
+# --- Drupal ---
+/sites/default/settings\.php
+/CHANGELOG\.txt
+
+# --- Genel Yönetim Panelleri (Honeypot) ---
+/admin/?$
+/administrator/?$
+/phpmyadmin/?
+/phpMyAdmin/?
+/pma/?
+/mysql/?
+/dbadmin/?
+/myadmin/?
+/cpanel/?
+/webadmin/?
+/controlpanel/?
+/manager/?
+
+# --- Veritabanı ve Backup Dosyaları ---
+/backup\.sql
+/dump\.sql
+/database\.sql
+/db\.sql
+/.*\.sql\.gz
+/.*\.tar\.gz
+/.*\.zip
+/backup/
+/bak/
+
+# --- Hassas Konfig & Bilgi Dosyaları ---
+/config\.php
+/config\.inc\.php
+/settings\.php
+/web\.config
+/crossdomain\.xml
+/server-status/?$
+/server-info/?$
+
+# --- Shell ve Exploit Araçları ---
+/shell\.php
+/cmd\.php
+/c99\.php
+/r57\.php
+/wso\.php
+/b374k\.php
+/weevely\.php
+/alfa\.php
+/indoxploit\.php
+/.*webshell.*\.php
+/cgi-bin/.*
+
+# --- Tarama Araçları / Path Traversal ---
+URI:/etc/passwd
+URI:/etc/shadow
+URI:/proc/self/environ
+URI:\.\./\.\./
+
+# --- HTTP Durum Kodu Tabanlı (çok sayıda 404 = tarayıcı) ---
+# STATUS:404
+# STATUS:403
+# Dikkat: Bu satırları aktif ederseniz meşru kullanıcılar da banlanabilir.
+# Yalnızca yukarıdaki URI pattern'larıyla birlikte değil, tek başına tetiklemek istiyorsanız açın.
+
+# --- Kötü Niyetli User-Agent'lar ---
+UA:sqlmap
+UA:nikto
+UA:nmap
+UA:masscan
+UA:zgrab
+UA:python-requests/2\.[0-9]
+UA:Go-http-client
+UA:curl/7\.[0-3]
+UA:WPScan
+UA:Acunetix
+UA:Nessus
+UA:OpenVAS
+UA:dirbuster
+UA:gobuster
+UA:ffuf
+UA:nuclei
+UA:havij
+UA:NetSparker
+UA:w3af
+UA:Burp
+UA:ZAP
+UA:(\bscanner\b|\bcrawler\b|\bexploit\b)

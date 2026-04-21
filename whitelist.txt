@@ -1,0 +1,21 @@
+# =============================================================================
+# honeyTEA v2 — IP Whitelist
+# =============================================================================
+# Bu dosyadaki IP adresleri asla banlanmaz.
+# Her satıra bir IP adresi yazın. # ile başlayan satırlar yorum sayılır.
+# IPv4 ve IPv6 desteklenir.
+# =============================================================================
+
+# Kendi sunucu IP'niz
+# 1.2.3.4
+
+# Cloudflare IP aralıkları (mod_cloudflare/real_ip_module kuruluysa gerek yok)
+# 103.21.244.0
+# 103.22.200.0
+
+# Güvenilir monitoring servisleri
+# 216.144.250.150  # UptimeRobot
+# 178.255.152.2    # Pingdom
+
+# Ofis IP'si
+# 85.123.45.67
